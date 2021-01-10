@@ -5,5 +5,6 @@ from . import views
 app_name = "georaffe"
 
 urlpatterns = [
-    path("json", views.get_geocode),
+    path("geocode/json", views.Geocode.as_view()),
+    path("reverse_geocode/json", views.ReverseGeocode.as_view()),
 ]
