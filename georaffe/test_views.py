@@ -19,22 +19,22 @@ import pytest
         ),
     ],
 )
-def test_get_geocode_given_existent_address(client, params, expected):
-    res = client.get("/api/json", params)
+def test_geocode_given_existent_address(client, params, expected):
+    res = client.get("/api/geocode/json", params)
 
     assert res.status_code == 200
     assert res.json() == expected
 
 
-def test_get_geocode_given_nonexistent_address(client):
-    res = client.get("/api/json", {"address": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"})
+def test_geocode_given_nonexistent_address(client):
+    res = client.get("/api/geocode/json", {"address": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"})
 
     assert res.status_code == 200
     assert res.json() == {"results": []}
 
 
-def test_get_geocode_given_invalid_address(client):
-    res = client.get("/api/json", {"address": ""})
+def test_geocode_given_invalid_address(client):
+    res = client.get("/api/geocode/json", {"address": ""})
 
     assert res.status_code == 400
     assert res.json()["status"] == "INVALID_REQUEST"

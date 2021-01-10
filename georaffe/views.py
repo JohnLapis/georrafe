@@ -29,7 +29,7 @@ def get_status_code(message):
 
 
 @require_http_methods(["GET"])
-def get_geocode(request):
+def geocode(request):
     res = requests.get(
         f"https://{API_ROOT}/json",
         params={
