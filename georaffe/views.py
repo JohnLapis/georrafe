@@ -20,6 +20,10 @@ def get_status_code(message):
     return API_RESPONSE_TABLE[message]
 
 
+class IndexView(View):
+    pass
+
+
 class Geocode(View):
     @staticmethod
     def parse_data(data):
