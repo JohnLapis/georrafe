@@ -1,4 +1,5 @@
 import pytest
+from django.urls import reverse
 
 
 class TestGeocode:
@@ -20,22 +21,23 @@ class TestGeocode:
             ),
         ],
     )
+    @pytest.mark.urls("georaffe.urls")
     def test_given_existent_address(self, client, params, expected):
-        res = client.get("/api/geocode/json", params)
+        res = client.get(reverse("geocode"), params)
 
         assert res.status_code == 200
         assert res.json() == expected
 
+    @pytest.mark.urls("georaffe.urls")
     def test_given_nonexistent_address(self, client):
-        res = client.get(
-            "/api/geocode/json", {"address": "j;aoskdfha6056050jasd"}
-        )
+        res = client.get(reverse("geocode"), {"address": "j;aoskdfha6056050jasd"})
 
         assert res.status_code == 200
         assert res.json() == {"results": []}
 
+    @pytest.mark.urls("georaffe.urls")
     def test_given_invalid_address(self, client):
-        res = client.get("/api/geocode/json", {"address": ""})
+        res = client.get(reverse("geocode"), {"address": ""})
 
         assert res.status_code == 400
         assert res.json()["status"] == "INVALID_REQUEST"
@@ -121,22 +123,25 @@ class TestReverseGeocode:
             ),
         ],
     )
+    @pytest.mark.urls("georaffe.urls")
     def test_given_valid_geocode(self, client, params, expected):
-        res = client.get("/api/reverse_geocode/json", params)
+        res = client.get(reverse("reverse_geocode"), params)
 
         assert res.status_code == 200
         assert res.json() == expected
 
+    @pytest.mark.urls("georaffe.urls")
     def test_given_nonexistent_geocode(self, client):
         res = client.get(
-            "/api/reverse_geocode/json", {"latlng": "84.451090, -75.045646"}
+            reverse("reverse_geocode"), {"latlng": "84.451090, -75.045646"}
         )
 
         assert res.status_code == 200
         assert res.json() == {"results": []}
 
+    @pytest.mark.urls("georaffe.urls")
     def test_given_invalid_geocode(self, client):
-        res = client.get("/api/geocode/json", {"latlng": ""})
+        res = client.get(reverse("reverse_geocode"), {"latlng": ""})
 
         assert res.status_code == 400
         assert res.json()["status"] == "INVALID_REQUEST"
