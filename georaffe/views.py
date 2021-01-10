@@ -45,3 +45,7 @@ def geocode(request):
     return JsonResponse(
         {"status": data["status"]}, status=get_status_code(data["status"])
     )
+
+@require_http_methods(["GET"])
+def reverse_geocode(request):
+    pass

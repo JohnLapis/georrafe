@@ -6,4 +6,5 @@ app_name = "georaffe"
 
 urlpatterns = [
     path("geocode/json", views.geocode),
+    path("reverse_geocode/json", views.reverse_geocode),
 ]
