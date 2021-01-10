@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
+from django.views.generic import View
 
 API_ROOT = "maps.googleapis.com/maps/api/geocode"
 API_KEY = settings.GOOGLE_GEOCODE_API_KEY
@@ -16,36 +16,32 @@ API_RESPONSE_TABLE = {
 }
 
 
-def parse_geocode_data(data):
-    return {
-        "results": [
-            {"location": res["geometry"]["location"]} for res in data["results"]
-        ]
-    }
-
-
 def get_status_code(message):
     return API_RESPONSE_TABLE[message]
 
 
-@require_http_methods(["GET"])
-def geocode(request):
-    res = requests.get(
-        f"https://{API_ROOT}/json",
-        params={
-            "address": request.GET.get("address"),
-            "key": API_KEY,
-        },
-    )
-    data = res.json()
+class Geocode(View):
+    @staticmethod
+    def parse_data(data):
+        return {
+            "results": [
+                {"location": res["geometry"]["location"]} for res in data["results"]
+            ]
+        }
 
-    if get_status_code(data["status"]) == 200:
-        return JsonResponse(parse_geocode_data(data), status=200)
+    def get(self, request):
+        res = requests.get(
+            f"https://{API_ROOT}/json",
+            params={
+                "address": request.GET.get("address"),
+                "key": API_KEY,
+            },
+        )
+        data = res.json()
 
-    return JsonResponse(
-        {"status": data["status"]}, status=get_status_code(data["status"])
-    )
+        if get_status_code(data["status"]) == 200:
+            return JsonResponse(self.parse_data(data), status=200)
 
-@require_http_methods(["GET"])
-def reverse_geocode(request):
-    pass
+        return JsonResponse(
+            {"status": data["status"]}, status=get_status_code(data["status"])
+        )
