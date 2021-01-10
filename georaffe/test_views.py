@@ -28,7 +28,7 @@ class TestGeocode:
 
     def test_given_nonexistent_address(self, client):
         res = client.get(
-            "/api/geocode/json", {"address": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"}
+            "/api/geocode/json", {"address": "j;aoskdfha6056050jasd"}
         )
 
         assert res.status_code == 200
