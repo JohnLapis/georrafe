@@ -45,3 +45,31 @@ class Geocode(View):
         return JsonResponse(
             {"status": data["status"]}, status=get_status_code(data["status"])
         )
+
+
+class ReverseGeocode(View):
+    @staticmethod
+    def parse_data(data):
+        return {
+            "results": [
+                {"formatted_address": res["formatted_address"]}
+                for res in data["results"]
+            ]
+        }
+
+    def get(self, request):
+        res = requests.get(
+            f"https://{API_ROOT}/json",
+            params={
+                "latlng": request.GET.get("latlng"),
+                "key": API_KEY,
+            },
+        )
+        data = res.json()
+
+        if get_status_code(data["status"]) == 200:
+            return JsonResponse(self.parse_data(data), status=200)
+
+        return JsonResponse(
+            {"status": data["status"]}, status=get_status_code(data["status"])
+        )
