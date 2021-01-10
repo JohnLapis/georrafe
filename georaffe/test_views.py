@@ -135,7 +135,6 @@ class TestReverseGeocode:
         assert res.status_code == 200
         assert res.json() == {"results": []}
 
-    @pytest.mark.only
     def test_given_invalid_geocode(self, client):
         res = client.get("/api/geocode/json", {"latlng": ""})
 
