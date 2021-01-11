@@ -125,7 +125,7 @@ class TestReverseGeocode:
     )
     @pytest.mark.urls("georaffe.urls")
     def test_given_valid_geocode(self, client, params, expected):
-        res = client.get(reverse("reverse_geocode"), params)
+        res = client.get(reverse("reverse-geocode"), params)
 
         assert res.status_code == 200
         assert res.json() == expected
@@ -133,7 +133,7 @@ class TestReverseGeocode:
     @pytest.mark.urls("georaffe.urls")
     def test_given_nonexistent_geocode(self, client):
         res = client.get(
-            reverse("reverse_geocode"), {"latlng": "84.451090, -75.045646"}
+            reverse("reverse-geocode"), {"latlng": "84.451090, -75.045646"}
         )
 
         assert res.status_code == 200
@@ -141,7 +141,7 @@ class TestReverseGeocode:
 
     @pytest.mark.urls("georaffe.urls")
     def test_given_invalid_geocode(self, client):
-        res = client.get(reverse("reverse_geocode"), {"latlng": ""})
+        res = client.get(reverse("reverse-geocode"), {"latlng": ""})
 
         assert res.status_code == 400
         assert res.json()["status"] == "INVALID_REQUEST"
