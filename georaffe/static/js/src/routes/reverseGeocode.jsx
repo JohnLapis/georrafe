@@ -12,14 +12,31 @@ function fetchData() {
   const latitude = document.querySelector("#latitude").value;
   const longitude = document.querySelector("#longitude").value;
   if (validateLatitude(latitude) && validateLongitude(longitude)) {
-    const params = {latlng: `${latitude},${longitude}`}
-    fetch("/reverse-geocode/json", params)
-      .then(data => data.json())
+    const latlng = encodeURIComponent(`${latitude},${longitude}`)
+    fetch(`/api/reverse-geocode/json?latlng=${latlng}`)
+      .then(res => res.json())
       .then(data => {
-        ReactDOM.render(
-          <Results data={data}/>,
-          document.querySelector('#results')
-        )
+        if (data.results.length === 0) {
+          ReactDOM.render(
+            <div><h4>No addresses found.</h4></div>,
+            document.querySelector('#results'),
+          );
+        } else {
+          ReactDOM.render(
+            <div>
+              <h4>Addresses:</h4>
+              <ul>
+                {data.results.map((res) => (
+                  <div>
+                    <li>{res.formatted_address}</li>
+                    <hr/>
+                  </div>
+                ))}
+              </ul>
+            </div>,
+            document.querySelector('#results')
+          )
+        }
       })
   } else {
     ReactDOM.render(
