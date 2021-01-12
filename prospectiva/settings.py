@@ -32,9 +32,6 @@ def get_secret(setting):
     except Exception:
         raise ImproperlyConfigured(f"The '{setting}' setting isn't set.")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret("SECRET_KEY")
 GOOGLE_GEOCODE_API_KEY = get_secret("GOOGLE_GEOCODE_API_KEY")
@@ -42,8 +39,10 @@ GOOGLE_GEOCODE_API_KEY = get_secret("GOOGLE_GEOCODE_API_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0"]
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 
@@ -136,3 +135,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = f'{BASE_DIR}/static/'
