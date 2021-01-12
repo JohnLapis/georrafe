@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 from django.http import JsonResponse
-from django.views.generic import View
+from django.views.generic import TemplateView, View
 
 API_ROOT = "maps.googleapis.com/maps/api/geocode"
 API_KEY = settings.GOOGLE_GEOCODE_API_KEY
@@ -20,8 +20,8 @@ def get_status_code(message):
     return API_RESPONSE_TABLE[message]
 
 
-class IndexView(View):
-    pass
+class IndexView(TemplateView):
+    template_name = "index.html"
 
 
 class Geocode(View):
