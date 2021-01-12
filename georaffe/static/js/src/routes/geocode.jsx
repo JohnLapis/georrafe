@@ -7,12 +7,21 @@ import { InvalidInputAlert, validateAddress } from '../utils.jsx';
 function fetchData() {
   const address = document.querySelector('#address').value;
   if (validateAddress(address)) {
-    const params = { address };
-    fetch('/api/geocode/json', params)
-      .then((data) => data.json())
+    fetch(`/api/geocode/json?address=${address}`)
+      .then((res) => res.json())
       .then((data) => {
         ReactDOM.render(
-          <Results data={data} />,
+          <div>
+            <h4>Locations:</h4>
+            <ul>
+              {data.results.map((res) => (
+                <div>
+                  <li>Latitude: {res.location.lat}, Longitude: {res.location.lng}</li>
+                  <hr/>
+                </div>
+              ))}
+            </ul>
+          </div>,
           document.querySelector('#results'),
         );
       });

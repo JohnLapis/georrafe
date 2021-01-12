@@ -11,7 +11,7 @@ export default function App() {
     <div>
       <Navbars />
       <Container fluid>
-        <Row>
+        <Row className="my-4">
           <Switch>
             <Route path="/geocode" component={Geocode} />
             <Route path="/reverse-geocode" component={ReverseGeocode} />
@@ -19,7 +19,7 @@ export default function App() {
             <Route path="/" component={Geocode} />
           </Switch>
         </Row>
-        <Row>
+        <Row className="my-4">
           <div id="results" />
         </Row>
       </Container>
