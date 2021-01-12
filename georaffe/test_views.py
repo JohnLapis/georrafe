@@ -1,6 +1,8 @@
 import pytest
 from django.urls import reverse
 
+from .views import GeometricDistance
+
 
 class TestGeocode:
     @pytest.mark.parametrize(
@@ -142,6 +144,102 @@ class TestReverseGeocode:
     @pytest.mark.urls("georaffe.urls")
     def test_given_invalid_geocode(self, client):
         res = client.get(reverse("reverse-geocode"), {"latlng": ""})
+
+        assert res.status_code == 400
+        assert res.json()["status"] == "INVALID_REQUEST"
+
+
+class TestGeometricDistance:
+    @pytest.mark.parametrize(
+        "point1,point2,expected",
+        [
+            (
+                {"x": -122.0892895, "y": 37.4215301},
+                {"x": -122.0892895, "y": 37.4215301},
+                0,
+            ),
+            (
+                {"x": 0, "y": 90},  # north pole
+                {"x": 0, "y": -90},  # south pole
+                # approximately, half of earth's circumference in meters
+                20015086.796020572,
+            ),
+            (
+                {"x": 180, "y": 90},  # extreme northeast
+                {"x": -180, "y": -90},  # extreme southwest
+                # approximately, half of earth's circumference in meters
+                20015086.796020572,
+            ),
+            (
+                {"x": -0.116773, "y": 51.510357},
+                {"x": -77.009003, "y": 38.889931},
+                5705124.321480648,
+            ),
+        ],
+    )
+    def test_get_geometric_distance(self, point1, point2, expected):
+        distance = GeometricDistance.get_geometric_distance(point1, point2)
+        assert distance == expected
+
+    @pytest.mark.parametrize(
+        "params,expected",
+        [
+            (
+                {"latlng": ["37.4215301,-122.0892895", "37.4215301,-122.0892895"]},
+                {"result": 0, "unit": "km"},
+            ),
+            (
+                # north and south pole
+                {"latlng": ["90,0", "-90,0"]},
+                # approximately, half of earth's circumference in meters
+                {"result": 20015.086796020572, "unit": "km"},
+            ),
+            (
+                # extreme northeast and southwest
+                {"latlng": ["90,180", "-90,-180"]},
+                # approximately, half of earth's circumference in meters
+                {"result": 20015.086796020572, "unit": "km"},
+            ),
+            (
+                {"latlng": ["51.510357,-0.116773", "38.889931,-77.009003"]},
+                {"result": 5705.124321480647, "unit": "km"},
+            ),
+        ],
+    )
+    @pytest.mark.urls("georaffe.urls")
+    def test_given_valid_coordinates(self, client, params, expected):
+        res = client.get(reverse("geometric-distance"), params)
+
+        assert res.status_code == 200
+        assert res.json() == expected
+
+    @pytest.mark.parametrize(
+        "params",
+        [
+            {},
+            {"a": "a", "b": "b"},
+            {"latlng": ["", ""]},
+            {"latlng": ["37.4215301,-122.0892895", "aaaaa,bbb"]},
+            {"latlng": ["37.4215301,zzzzzzzz", "aaaaa,bbb"]},
+            {"latlng": ["zzzzzzzzzz,-122.0892895", "aaaaa,bbb"]},
+            {
+                "latlng": [
+                    "37.4215301,-122.0892895,37.4215301",
+                    "37.4215301,-122.0892895",
+                ]
+            },
+            {
+                "latlng": [
+                    "37.4215301,-122.0892895",
+                    "37.4215301,-122.0892895",
+                    "37.4215301,-122.0892895",
+                ]
+            },
+        ],
+    )
+    @pytest.mark.urls("georaffe.urls")
+    def test_given_invalid_input(self, client, params):
+        res = client.get(reverse("geometric-distance"), params)
 
         assert res.status_code == 400
         assert res.json()["status"] == "INVALID_REQUEST"
