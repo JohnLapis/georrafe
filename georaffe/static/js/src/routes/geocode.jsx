@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Row, Container, Button, FormControl, Form } from 'react-bootstrap';
-import Results from '../components/results.jsx';
+import {
+  Row, Container, Button, FormControl, Form,
+} from 'react-bootstrap';
 import { InvalidInputAlert, validateAddress } from '../utils.jsx';
 
 function fetchData() {
@@ -22,8 +23,13 @@ function fetchData() {
               <ul>
                 {data.results.map((res) => (
                   <div>
-                    <li>Latitude: {res.location.lat}, Longitude: {res.location.lng}</li>
-                    <hr/>
+                    <li>
+                      Latitude:
+                      {res.location.lat}
+                      , Longitude:
+                      {res.location.lng}
+                    </li>
+                    <hr />
                   </div>
                 ))}
               </ul>
