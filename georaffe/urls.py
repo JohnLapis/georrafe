@@ -12,4 +12,9 @@ urlpatterns = [
         views.ReverseGeocode.as_view(),
         name="reverse-geocode",
     ),
+    path(
+        "api/geometric-distance/json",
+        views.GeometricDistance.as_view(),
+        name="geometric-distance",
+    ),
 ]

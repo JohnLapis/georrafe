@@ -145,3 +145,36 @@ class TestReverseGeocode:
 
         assert res.status_code == 400
         assert res.json()["status"] == "INVALID_REQUEST"
+
+
+class TestGeometricDistance:
+    @pytest.mark.parametrize(
+        "params",
+        [
+            {},
+            {"a": "a", "b": "b"},
+            {"latlng": ["", ""]},
+            {"latlng": ["37.4215301,-122.0892895", "aaaaa,bbb"]},
+            {"latlng": ["37.4215301,zzzzzzzz", "aaaaa,bbb"]},
+            {"latlng": ["zzzzzzzzzz,-122.0892895", "aaaaa,bbb"]},
+            {
+                "latlng": [
+                    "37.4215301,-122.0892895,37.4215301",
+                    "37.4215301,-122.0892895",
+                ]
+            },
+            {
+                "latlng": [
+                    "37.4215301,-122.0892895",
+                    "37.4215301,-122.0892895",
+                    "37.4215301,-122.0892895",
+                ]
+            },
+        ],
+    )
+    @pytest.mark.urls("georaffe.urls")
+    def test_given_invalid_input(self, client, params):
+        res = client.get(reverse("geometric-distance"), params)
+
+        assert res.status_code == 400
+        assert res.json()["status"] == "INVALID_REQUEST"

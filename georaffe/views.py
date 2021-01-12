@@ -77,3 +77,47 @@ class ReverseGeocode(View):
         return JsonResponse(
             {"status": data["status"]}, status=get_status_code(data["status"])
         )
+
+
+class GeometricDistance(View):
+    @staticmethod
+    def validate_latitude(lat):
+        return int(lat) >= -90 and int(lat) <= 90
+
+    @staticmethod
+    def validate_longitude(lng):
+        return int(lng) >= -180 and int(lng) <= 180
+
+    @staticmethod
+    def parse_data(data):
+        lat, lng, *rest = data.split(",")
+        try:
+            if len(rest) != 0:
+                raise ValueError
+            self.validate_latitude(lat)
+            self.validate_longitude(lng)
+        except Exception:
+            raise ValueError
+
+        return (int(lat), int(lng))
+
+    @staticmethod
+    def get_geometric_distance(lat_lng1, lat_lng2):
+        pass
+
+    def get(self, request):
+        try:
+            lat_lng1, lat_lng2, *rest = [
+                self.parse_data(value) for value in request.GET.getlist("latlng")
+            ]
+
+            if len(rest) != 0:
+                raise ValueError
+        except ValueError:
+            return JsonResponse(
+                {"status": "INVALID_REQUEST"},
+                status=get_status_code("INVALID_REQUEST"),
+            )
+
+        distance = self.get_geometric_distance(lat_lng1, lat_lng2)
+        return JsonResponse({"result": distance}, status=200)
