@@ -20,17 +20,22 @@ function fetchData() {
       && validateLongitude(longitude1)
       && validateLatitude(latitude2)
       && validateLongitude(longitude2)) {
-    const params = {
-      latlng1: `${latitude1},${longitude1}`,
-      latlng2: `${latitude2},${longitude2}`
-    }
-    fetch("/api/geometric-distance/json", params)
-      .then(data => data.json())
+    const latlng1 = encodeURIComponent(`${latitude1},${longitude1}`)
+    const latlng2 = encodeURIComponent(`${latitude2},${longitude2}`)
+    fetch(`/api/geometric-distance/json?latlng=${latlng1}&latlng=${latlng2}`)
+      .then(res => res.json())
       .then(data => {
-        ReactDOM.render(
-          <Results data={data}/>,
-          document.querySelector('#results')
-        )
+        if (data.result === undefined) {
+          ReactDOM.render(
+            <div><h4>It was not possible to calculate the distance.</h4></div>,
+            document.querySelector('#results')
+          )
+        } else {
+          ReactDOM.render(
+            <div><h4>Distance: {data.result} {data.unit}</h4></div>,
+            document.querySelector('#results'),
+          );
+        }
       })
   } else {
     ReactDOM.render(
@@ -43,41 +48,42 @@ function fetchData() {
 export default class GeometricDistance extends Component {
   render() {
     return (
-      <div>
+      <Container>
         <Form className="justify-content-center" inline>
-          <Container>
-            <Row>
+          <Row className="my-4">
               <FormControl
                 id="latitude1"
                 size="lg"
                 type="text"
                 placeholder="Enter latitude"/>
-              <FormControl
-                id="longitude1"
-                size="lg"
-                type="text"
-                placeholder="Enter longitude"/>
-            </Row>
-            <Row>
-              <FormControl
-                id="latitude2"
-                size="lg"
-                type="text"
-                placeholder="Enter latitude"/>
-              <FormControl
-                id="longitude2"
-                size="lg"
-                type="text"
-                placeholder="Enter longitude"/>
-            </Row>
-            <Row>
-              <Button size="lg" onClick={fetchData} variant="outline-success">
-                Calculate Geometric Distance
-              </Button>
-            </Row>
-          </Container>
+            <FormControl
+              id="longitude1"
+              size="lg"
+              type="text"
+              placeholder="Enter longitude"/>
+          </Row>
+          <Row>
+            <FormControl
+              id="latitude2"
+              size="lg"
+              type="text"
+              placeholder="Enter latitude"/>
+            <FormControl
+              id="longitude2"
+              size="lg"
+              type="text"
+              placeholder="Enter longitude"/>
+          </Row>
+          <Row className="my-4">
+            <Button size="lg" onClick={fetchData} variant="outline-success">
+              Calculate Geometric Distance
+            </Button>
+          </Row>
         </Form>
-      </div>
+        <Row className="my-4">
+          <div id="results" />
+        </Row>
+      </Container>
     )
   }
 }
