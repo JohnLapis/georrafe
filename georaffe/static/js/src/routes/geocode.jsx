@@ -12,7 +12,7 @@ function fetchData() {
       .then((data) => {
         if (data.results.length === 0) {
           ReactDOM.render(
-            <div><h4>No results found.</h4></div>,
+            <div><h4>No locations found.</h4></div>,
             document.querySelector('#results'),
           );
         } else {
