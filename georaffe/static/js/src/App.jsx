@@ -9,20 +9,13 @@ import GeometricDistance from './routes/geometricDistance.jsx';
 export default function App() {
   return (
     <div>
-      <Navbars />
-      <Container fluid>
-        <Row className="my-4">
-          <Switch>
-            <Route path="/geocode" component={Geocode} />
-            <Route path="/reverse-geocode" component={ReverseGeocode} />
-            <Route path="/geometric-distance" component={GeometricDistance} />
-            <Route path="/" component={Geocode} />
-          </Switch>
-        </Row>
-        <Row className="my-4">
-          <div id="results" />
-        </Row>
-      </Container>
+      <Navbars/>
+      <Switch>
+        <Route path="/geocode" component={Geocode} />
+        <Route path="/reverse-geocode" component={ReverseGeocode} />
+        <Route path="/geometric-distance" component={GeometricDistance} />
+        <Route path="/" component={Geocode} />
+      </Switch>
     </div>
   );
 }

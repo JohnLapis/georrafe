@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Button, FormControl, Form } from 'react-bootstrap';
+import { Row, Container, Button, FormControl, Form } from 'react-bootstrap';
 import Results from '../components/results.jsx';
 import { InvalidInputAlert, validateAddress } from '../utils.jsx';
 
@@ -42,18 +42,23 @@ function fetchData() {
 
 export default function Geocode() {
   return (
-    <div>
-      <Form className="justify-content-center" inline>
-        <FormControl
-          id="address"
-          size="lg"
-          type="text"
-          placeholder="Enter address"
-        />
-        <Button size="lg" onClick={fetchData} variant="outline-success">
-          Search Geocode
-        </Button>
-      </Form>
-    </div>
+    <Container>
+      <Row className="my-4">
+        <Form className="justify-content-center" inline>
+          <FormControl
+            id="address"
+            size="lg"
+            type="text"
+            placeholder="Enter address"
+          />
+          <Button size="lg" onClick={fetchData} variant="outline-success">
+            Search Geocode
+          </Button>
+        </Form>
+      </Row>
+      <Row className="my-4">
+        <div id="results" />
+      </Row>
+    </Container>
   );
 }

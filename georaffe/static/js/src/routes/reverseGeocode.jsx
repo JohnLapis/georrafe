@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Container, Row, Button, FormControl, Form } from 'react-bootstrap'
 import Results from '../components/results.jsx'
 import {
   InvalidInputAlert,
   validateLatitude,
   validateLongitude
 } from '../utils.jsx'
-import { Button, FormControl, Form } from 'react-bootstrap'
 
 function fetchData() {
   const latitude = document.querySelector("#latitude").value;
@@ -49,23 +49,28 @@ function fetchData() {
 export default class ReverseGeocode extends Component {
   render() {
     return (
-      <div>
-        <Form className="justify-content-center" inline>
-          <FormControl
-            id="latitude"
-            size="lg"
-            type="text"
-            placeholder="Enter latitude"/>
-          <FormControl
-            id="longitude"
-            size="lg"
-            type="text"
-            placeholder="Enter longitude"/>
-          <Button size="lg" onClick={fetchData} variant="outline-success">
-            Search Address
-          </Button>
-        </Form>
-      </div>
+      <Container>
+        <Row className="my-4">
+          <Form className="justify-content-center" inline>
+            <FormControl
+              id="latitude"
+              size="lg"
+              type="text"
+              placeholder="Enter latitude"/>
+            <FormControl
+              id="longitude"
+              size="lg"
+              type="text"
+              placeholder="Enter longitude"/>
+            <Button size="lg" onClick={fetchData} variant="outline-success">
+              Search Address
+            </Button>
+          </Form>
+        </Row>
+        <Row className="my-4">
+          <div id="results" />
+        </Row>
+      </Container>
     )
   }
 }
