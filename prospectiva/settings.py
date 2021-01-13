@@ -36,7 +36,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 GOOGLE_GEOCODE_API_KEY = get_secret("GOOGLE_GEOCODE_API_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["0.0.0.0"]
 
