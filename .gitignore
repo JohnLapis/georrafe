@@ -1,6 +1,9 @@
 # Environment variables
-/secrets.json
+/.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+# Webpack output
+/georaffe/static/dist/

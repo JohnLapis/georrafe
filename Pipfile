@@ -10,10 +10,13 @@ black = "*"
 pytest = "*"
 importlib-metadata = "<3"
 prospector = "*"
+pytest-django = "*"
 
 [packages]
 importlib-metadata = "==2.1.1"
 django = "*"
+requests = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
