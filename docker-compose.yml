@@ -1,0 +1,19 @@
+version: "3.0"
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "5000:80"
+    volumes:
+      - ./conf:/etc/nginx/conf.d
+      - ./static:/srv/static
+    depends_on:
+      - web
+  web:
+    build: .
+    container_name: georaffe
+    command: gunicorn prospectiva.wsgi -b 0.0.0.0:8000
+    env_file:
+      - .env
+    expose:
+      - "8000"
